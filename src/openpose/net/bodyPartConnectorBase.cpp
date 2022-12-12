@@ -564,8 +564,8 @@ namespace op
             for(auto bodyPart = 0u; bodyPart < 25; bodyPart++){
                 const auto* candidatePtr = peaksPtr + bodyPart*peaksOffset;
                 const auto numberPeaks = positiveIntRound(candidatePtr[0]);
-                std::cout << "# part " << bodyPart << std::endl;
-                std::cout << numberPeaks << std::endl;
+                std::cout << "# Part " << bodyPart << std::endl;
+                std::cout << "# Shape " << numberPeaks << std::endl;
                 if(numberPeaks > 0){
                     for(auto index_xyc=0;index_xyc < 3;index_xyc++){
                         for (auto index = 0; index < numberPeaks; index++)
@@ -580,6 +580,7 @@ namespace op
                             std::cout << value << " ";
                         }
                     }
+                    std::cout << std::endl;
                 }else{
                     std::cout << std::endl;
                 }
@@ -620,6 +621,7 @@ namespace op
                     }
                     results_pair.emplace_back(res_index_A);
                 }
+                std::cout << std::endl;
                 pairConnections.emplace_back(results_pair);
             }
             std::cout << "# end frames: " << std::endl;
