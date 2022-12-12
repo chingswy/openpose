@@ -574,7 +574,7 @@ namespace op
                             if(index_xyc == 0){
                                 value /= heatMapSize.x;
                             }else if(index_xyc == 1){
-                                value /= heatMapSize.1;
+                                value /= heatMapSize.y;
                             }
                             std::cout << value << " ";
                         }
