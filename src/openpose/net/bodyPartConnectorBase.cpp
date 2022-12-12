@@ -600,6 +600,7 @@ namespace op
                 const auto firstIndex = (int)pairIndex*pairScores.getSize(1)*pairScores.getSize(2);
                 // E.g., neck-nose connection. For each neck
                 if(numberPeaksA == 0 || numberPeaksB == 0){
+                    std::cout << std::endl;
                     continue;
                 }
                 for (auto indexA = 0; indexA < numberPeaksA; indexA++)
