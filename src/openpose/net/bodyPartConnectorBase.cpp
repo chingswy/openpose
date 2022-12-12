@@ -7,6 +7,8 @@
 #include <openpose/utilities/keypoint.hpp>
 #include <openpose/pose/poseParameters.hpp>
 
+#define mylog(x) std::cout << "  " << #x << ": " << x << std::endl;
+
 namespace op
 {
     template <typename T>
@@ -530,6 +532,90 @@ namespace op
             if (!pairConnections.empty())
                 std::sort(pairConnections.begin(), pairConnections.end(),
                           std::greater<std::tuple<double, double, int, int, int>>());
+
+            // Return result
+            return pairConnections;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return {};
+        }
+    }
+
+    template <typename T>
+    std::vector<std::vector<Array<T>>> pafPtrIntoMatrix(
+        const Array<T>& pairScores, const T* const peaksPtr, const int maxPeaks,
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs)
+    {
+        try
+        {
+            // Result is a std::vector<std::tuple<double, double, int, int, int>> with:
+            // (totalScore, PAFscore, pairIndex, indexA, indexB)
+            // totalScore is first to simplify later sorting
+            std::vector<std::vector<Array<T>>> pairConnections;
+
+            // Get all PAF pairs in a single std::vector
+            const auto peaksOffset = 3*(maxPeaks+1);
+            std::cout << "newframes: " << std::endl;
+            // 先输出每个part的候选
+            std::cout << "partCandidates: " << std::endl;
+            for(auto bodyPart = 0u; bodyPart < 25; bodyPart++){
+                const auto* candidatePtr = peaksPtr + bodyPart*peaksOffset;
+                const auto numberPeaks = positiveIntRound(candidatePtr[0]);
+                std::cout << numberPeaks << std::endl;
+                if(numberPeaks > 0){
+                    for(auto index_xyc=0;index_xyc < 3;index_xyc++){
+                        for (auto index = 0; index < numberPeaks; index++)
+                        {
+                            const auto indexValue = bodyPart*peaksOffset + (index+1)*3 + index_xyc;
+                            std::cout << indexValue << " ";
+                        }
+                        std::cout << std::endl;
+                    }
+                }else{
+                    std::cout << std::endl;
+                }
+            }
+
+            for (auto pairIndex = 0u; pairIndex < numberBodyPartPairs; pairIndex++)
+            {
+                const auto bodyPartA = bodyPartPairs[2*pairIndex];
+                const auto bodyPartB = bodyPartPairs[2*pairIndex+1];
+                const auto* candidateAPtr = peaksPtr + bodyPartA*peaksOffset;
+                const auto* candidateBPtr = peaksPtr + bodyPartB*peaksOffset;
+                const auto numberPeaksA = positiveIntRound(candidateAPtr[0]);
+                const auto numberPeaksB = positiveIntRound(candidateBPtr[0]);
+                std::cout << std::endl;
+                std::cout << "Part " << bodyPartA << " " << bodyPartB << std::endl;
+                std::cout << "Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
+                std::vector<Array<T>> results_pair;
+                const auto firstIndex = (int)pairIndex*pairScores.getSize(1)*pairScores.getSize(2);
+                // E.g., neck-nose connection. For each neck
+                for (auto indexA = 0; indexA < numberPeaksA; indexA++)
+                {
+                    const auto iIndex = firstIndex + indexA*pairScores.getSize(2);
+                    Array<T> res_index_A;
+                    res_index_A.reset(numberPeaksB);
+                    // E.g., neck-nose connection. For each nose
+                    for (auto indexB = 0; indexB < numberPeaksB; indexB++)
+                    {
+                        const auto scoreAB = pairScores[iIndex + indexB];
+                        std::cout << scoreAB << " ";
+                        // E.g., neck-nose connection. If possible PAF between neck indexA, nose indexB --> add
+                        // parts score + connection score
+                        res_index_A[indexB] = scoreAB;
+                    }
+                    results_pair.emplace_back(res_index_A);
+                    std::cout << std::endl;
+                }
+                pairConnections.emplace_back(results_pair);
+            }
+
+            // Sort rows in descending order based on its first element (`totalScore`)
+            // if (!pairConnections.empty())
+            //     std::sort(pairConnections.begin(), pairConnections.end(),
+            //               std::greater<std::tuple<double, double, int, int, int>>());
 
             // Return result
             return pairConnections;
@@ -1430,6 +1516,14 @@ namespace op
         const Array<float>& pairScores, const float* const peaksPtr, const int maxPeaks,
         const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
     template OP_API std::vector<std::tuple<double, double, int, int, int>> pafPtrIntoVector(
+        const Array<double>& pairScores, const double* const peaksPtr, const int maxPeaks,
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
+    
+    template OP_API std::vector<std::vector<Array<float>>> pafPtrIntoMatrix(
+        const Array<float>& pairScores, const float* const peaksPtr, const int maxPeaks,
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
+
+    template OP_API std::vector<std::vector<Array<double>>> pafPtrIntoMatrix(
         const Array<double>& pairScores, const double* const peaksPtr, const int maxPeaks,
         const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
 

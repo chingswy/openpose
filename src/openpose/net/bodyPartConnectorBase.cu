@@ -210,6 +210,9 @@ namespace op
             // Get pair connections and their scores
             const auto pairConnections = pafPtrIntoVector(
                 pairScoresCpu, peaksPtr, maxPeaks, bodyPartPairs, numberBodyPartPairs);
+            const auto pafs = pafPtrIntoMatrix(
+                pairScoresCpu, peaksPtr, maxPeaks, bodyPartPairs, numberBodyPartPairs);
+            
             auto peopleVector = pafVectorIntoPeopleVector(
                 pairConnections, peaksPtr, maxPeaks, bodyPartPairs, numberBodyParts);
             // // Old code: Get pair connections and their scores
