@@ -558,9 +558,9 @@ namespace op
 
             // Get all PAF pairs in a single std::vector
             const auto peaksOffset = 3*(maxPeaks+1);
-            std::cout << "newframes: " << std::endl;
+            std::cout << "# newframes: " << std::endl;
             // 先输出每个part的候选
-            std::cout << "partCandidates: " << std::endl;
+            std::cout << "# partCandidates: " << std::endl;
             for(auto bodyPart = 0u; bodyPart < 25; bodyPart++){
                 const auto* candidatePtr = peaksPtr + bodyPart*peaksOffset;
                 const auto numberPeaks = positiveIntRound(candidatePtr[0]);
@@ -593,8 +593,8 @@ namespace op
                 const auto* candidateBPtr = peaksPtr + bodyPartB*peaksOffset;
                 const auto numberPeaksA = positiveIntRound(candidateAPtr[0]);
                 const auto numberPeaksB = positiveIntRound(candidateBPtr[0]);
-                // std::cout << "Part " << bodyPartA << " " << bodyPartB << std::endl;
-                // std::cout << "Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
+                std::cout << "# Part " << bodyPartA << " " << bodyPartB << std::endl;
+                std::cout << "# Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
                 std::vector<Array<T>> results_pair;
                 const auto firstIndex = (int)pairIndex*pairScores.getSize(1)*pairScores.getSize(2);
                 // E.g., neck-nose connection. For each neck
