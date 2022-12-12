@@ -579,7 +579,6 @@ namespace op
                             }
                             std::cout << value << " ";
                         }
-                        std::cout << std::endl;
                     }
                 }else{
                     std::cout << std::endl;
@@ -620,7 +619,6 @@ namespace op
                         res_index_A[indexB] = scoreAB;
                     }
                     results_pair.emplace_back(res_index_A);
-                    std::cout << std::endl;
                 }
                 pairConnections.emplace_back(results_pair);
             }
