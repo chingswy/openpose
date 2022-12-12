@@ -211,7 +211,7 @@ namespace op
             const auto pairConnections = pafPtrIntoVector(
                 pairScoresCpu, peaksPtr, maxPeaks, bodyPartPairs, numberBodyPartPairs);
             const auto pafs = pafPtrIntoMatrix(
-                pairScoresCpu, peaksPtr, maxPeaks, bodyPartPairs, numberBodyPartPairs);
+                pairScoresCpu, peaksPtr, maxPeaks, bodyPartPairs, numberBodyPartPairs, heatMapSize);
             
             auto peopleVector = pafVectorIntoPeopleVector(
                 pairConnections, peaksPtr, maxPeaks, bodyPartPairs, numberBodyParts);

@@ -546,7 +546,8 @@ namespace op
     template <typename T>
     std::vector<std::vector<Array<T>>> pafPtrIntoMatrix(
         const Array<T>& pairScores, const T* const peaksPtr, const int maxPeaks,
-        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs)
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs,
+        const Point<int>& heatMapSize)
     {
         try
         {
@@ -569,7 +570,13 @@ namespace op
                         for (auto index = 0; index < numberPeaks; index++)
                         {
                             const auto indexValue = bodyPart*peaksOffset + (index+1)*3 + index_xyc;
-                            std::cout << peaksPtr[indexValue] << " ";
+                            auto value = peaksPtr[indexValue];
+                            if(index_xyc == 0){
+                                value /= heatMapSize.x;
+                            }else if(index_xyc == 1){
+                                value /= heatMapSize.1;
+                            }
+                            std::cout << value << " ";
                         }
                         std::cout << std::endl;
                     }
@@ -587,8 +594,8 @@ namespace op
                 const auto numberPeaksA = positiveIntRound(candidateAPtr[0]);
                 const auto numberPeaksB = positiveIntRound(candidateBPtr[0]);
                 std::cout << std::endl;
-                std::cout << "Part " << bodyPartA << " " << bodyPartB << std::endl;
-                std::cout << "Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
+                // std::cout << "Part " << bodyPartA << " " << bodyPartB << std::endl;
+                // std::cout << "Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
                 std::vector<Array<T>> results_pair;
                 const auto firstIndex = (int)pairIndex*pairScores.getSize(1)*pairScores.getSize(2);
                 // E.g., neck-nose connection. For each neck
@@ -1521,11 +1528,13 @@ namespace op
     
     template OP_API std::vector<std::vector<Array<float>>> pafPtrIntoMatrix(
         const Array<float>& pairScores, const float* const peaksPtr, const int maxPeaks,
-        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs,
+        const Point<int>& heatMapSize);
 
     template OP_API std::vector<std::vector<Array<double>>> pafPtrIntoMatrix(
         const Array<double>& pairScores, const double* const peaksPtr, const int maxPeaks,
-        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs,
+        const Point<int>& heatMapSize);
 
     template OP_API std::vector<std::pair<std::vector<int>, float>> pafVectorIntoPeopleVector(
         const std::vector<std::tuple<float, float, int, int, int>>& pairConnections,
