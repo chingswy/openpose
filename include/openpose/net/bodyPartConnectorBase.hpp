@@ -1,6 +1,6 @@
 #ifndef OPENPOSE_POSE_BODY_PARTS_CONNECTOR_HPP
 #define OPENPOSE_POSE_BODY_PARTS_CONNECTOR_HPP
-
+#include <iostream>
 #include <openpose/core/common.hpp>
 #include <openpose/pose/enumClasses.hpp>
 
@@ -59,6 +59,12 @@ namespace op
     std::vector<std::tuple<T, T, int, int, int>> pafPtrIntoVector(
         const Array<T>& pairScores, const T* const peaksPtr, const int maxPeaks,
         const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs);
+
+    template <typename T>
+    std::vector<std::vector<Array<T>>> pafPtrIntoMatrix(
+        const Array<T>& pairScores, const T* const peaksPtr, const int maxPeaks,
+        const std::vector<unsigned int>& bodyPartPairs, const unsigned int numberBodyPartPairs,
+        const Point<int>& heatMapSize);
 
     template <typename T>
     std::vector<std::pair<std::vector<int>, T>> pafVectorIntoPeopleVector(
