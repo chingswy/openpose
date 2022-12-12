@@ -593,12 +593,14 @@ namespace op
                 const auto* candidateBPtr = peaksPtr + bodyPartB*peaksOffset;
                 const auto numberPeaksA = positiveIntRound(candidateAPtr[0]);
                 const auto numberPeaksB = positiveIntRound(candidateBPtr[0]);
-                std::cout << std::endl;
                 // std::cout << "Part " << bodyPartA << " " << bodyPartB << std::endl;
                 // std::cout << "Shape " << numberPeaksA << " " << numberPeaksB << std::endl;
                 std::vector<Array<T>> results_pair;
                 const auto firstIndex = (int)pairIndex*pairScores.getSize(1)*pairScores.getSize(2);
                 // E.g., neck-nose connection. For each neck
+                if(numberPeaksA == 0 || numberPeaksB == 0){
+                    continue;
+                }
                 for (auto indexA = 0; indexA < numberPeaksA; indexA++)
                 {
                     const auto iIndex = firstIndex + indexA*pairScores.getSize(2);
@@ -607,7 +609,10 @@ namespace op
                     // E.g., neck-nose connection. For each nose
                     for (auto indexB = 0; indexB < numberPeaksB; indexB++)
                     {
-                        const auto scoreAB = pairScores[iIndex + indexB];
+                        auto scoreAB = pairScores[iIndex + indexB];
+                        if(scoreAB < 0){
+                            scoreAB = 0;
+                        }
                         std::cout << scoreAB << " ";
                         // E.g., neck-nose connection. If possible PAF between neck indexA, nose indexB --> add
                         // parts score + connection score
