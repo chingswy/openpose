@@ -564,6 +564,7 @@ namespace op
             for(auto bodyPart = 0u; bodyPart < 25; bodyPart++){
                 const auto* candidatePtr = peaksPtr + bodyPart*peaksOffset;
                 const auto numberPeaks = positiveIntRound(candidatePtr[0]);
+                std::cout << "# part " << bodyPart << std::endl;
                 std::cout << numberPeaks << std::endl;
                 if(numberPeaks > 0){
                     for(auto index_xyc=0;index_xyc < 3;index_xyc++){
@@ -584,7 +585,7 @@ namespace op
                     std::cout << std::endl;
                 }
             }
-
+            std::cout << "# pafs: " << std::endl;
             for (auto pairIndex = 0u; pairIndex < numberBodyPartPairs; pairIndex++)
             {
                 const auto bodyPartA = bodyPartPairs[2*pairIndex];
@@ -623,7 +624,7 @@ namespace op
                 }
                 pairConnections.emplace_back(results_pair);
             }
-
+            std::cout << "# end frames: " << std::endl;
             // Sort rows in descending order based on its first element (`totalScore`)
             // if (!pairConnections.empty())
             //     std::sort(pairConnections.begin(), pairConnections.end(),
