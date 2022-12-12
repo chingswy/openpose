@@ -569,7 +569,7 @@ namespace op
                         for (auto index = 0; index < numberPeaks; index++)
                         {
                             const auto indexValue = bodyPart*peaksOffset + (index+1)*3 + index_xyc;
-                            std::cout << indexValue << " ";
+                            std::cout << peaksPtr[indexValue] << " ";
                         }
                         std::cout << std::endl;
                     }
